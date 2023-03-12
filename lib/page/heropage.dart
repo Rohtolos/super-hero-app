@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hero_app/widget/image.dart';
+import 'package:hero_app/page/home.dart';
 
 class HeroPage extends StatelessWidget {
+  final String imageUrl;
+
+  HeroPage(this.imageUrl);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -9,7 +13,8 @@ class HeroPage extends StatelessWidget {
       home: Scaffold(
         body: Column(
           children: [
-            ImageBox(),
+            Image.network(imageUrl),
+
           ],
         ),
       ),

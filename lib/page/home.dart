@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hero_app/widget/searchbar.dart';
 
+import '../model/datamodel.dart';
+import '../repository/remoterepository.dart';
+
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   HomeScreenState createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomePage> {
-  Icon customIcon = const Icon(Icons.search);
-  Widget customSearchBar = const Text('My Personal Journal');
+  final Icon customIcon = const Icon(Icons.search);
+  final Widget customSearchBar = const Text('My Personal Journal');
+  final RemoteRepository remoteRepository = RemoteRepository();
+  String src = '';
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +23,31 @@ class HomeScreenState extends State<HomePage> {
       home: Scaffold(
         appBar: AppBar(title: const Text('RohtolosX')),
         body: Column(
-          children: const [
-            SearchBar(),
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
+              child: TextField(
+                autocorrect: true,
+                onSubmitted: (String name) async {
+                  DataModel dataModel =
+                      await remoteRepository.getResponse(name);
+                  src = dataModel.url;
+                  setState(() {});
+                },
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    filled: false,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    hintText: 'Your hero...',
+                    hintStyle:
+                        const TextStyle(color: Colors.blueGrey, fontSize: 18)),
+              ),
+            ),
+            src != '' ? Container(
+              child: Image.network(src),
+            ) : Container()
           ],
         ),
       ),
